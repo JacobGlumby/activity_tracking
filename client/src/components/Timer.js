@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { pad, timeDifference } from "../utils"
 import Axios from 'axios';
 
 
@@ -6,7 +7,7 @@ const Timer = ({ inputText, setInputText, activity, setActivity }) => {
 
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
-    const [time, setTime] = useState("");
+    const [time, setTime] = useState("00:00:00");
     const [isTracking, setTracking] = useState(false);
     const [intervalId, setIntervalId] = useState(0);
 
@@ -16,17 +17,12 @@ const Timer = ({ inputText, setInputText, activity, setActivity }) => {
 
     const startTimeHandler = (e) => {
         e.preventDefault();
-        setStartTime(new Date());
+        const start = new Date();
+        setStartTime(start);
         setTracking(!isTracking);
-        console.log(startTime);
-        const newIntervalId = setInterval(()=>{
-            const diffMs = Date.now() - startTime.getTime();
-            console.log(diffMs);
-            const diffSec = Math.floor(diffMs/1000);
-            const diffMin = Math.floor(diffSec/60);
-            const diffHr = Math.floor(diffMin/60);
-            setTime(`${diffHr}:${diffMin}:${diffSec}`);
-        },1000);
+        const newIntervalId = setInterval(() => {
+            setTime(timeDifference(Date.now(),start.getTime())) // merely serves as a display time on timer. 
+        }, 1000);
         setIntervalId(newIntervalId);
     }
     const submitActivityHandler = (e) => {
@@ -40,23 +36,25 @@ const Timer = ({ inputText, setInputText, activity, setActivity }) => {
         setTracking(!isTracking);
 
         var end = new Date();
-        Axios.post('/activities', { 
-            title: inputText, 
-            start: startTime.toLocaleTimeString(), 
-            end: end.toLocaleTimeString()
+        Axios.post('/activities', {
+            title: inputText,
+            start: startTime.toLocaleTimeString('en-GB'),
+            end: end.toLocaleTimeString('en-GB'),
+            
+            time: timeDifference(end.getTime(),startTime.getTime()) //Ensures correct second on end time.
         }).then((res) => console.log(res));
         setStartTime("");
-        
-
+        setTime("00:00:00")
     }
+
     return (
         <form>
-            <input value={inputText} onChange={inputTextHandler} type="text" className="timer-input" />
+            <input className="timer-input" value={inputText} onChange={inputTextHandler} type="text" />
             <div className="timer-time">{time}</div>
             {isTracking ?
-                <button onClick={submitActivityHandler} className="timer-button" type="submit">Stop</button>
+                <button className="timer-button" onClick={submitActivityHandler} type="submit">Stop</button>
                 :
-                <button onClick={startTimeHandler} className="timer-button" type="submit">Start</button>
+                <button className="timer-button" onClick={startTimeHandler}  type="submit">Start</button>
             }
         </form>
     );
