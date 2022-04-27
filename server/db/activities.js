@@ -5,7 +5,7 @@ function createActivity(activity){
 }
 
 function getAllActivities(){
-    return knex("activities").select("*");
+    return knex("activities").select("*").orderBy('id', 'desc');
 }
 
 module.exports = {
