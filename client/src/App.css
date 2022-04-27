@@ -1,0 +1,101 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#root {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.App {
+    height: 100vh;
+    background: rgb(240, 234, 234);
+    padding: 20px;
+    width: 50vw;
+    min-width: 370px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+}
+
+header,
+form,
+.activity-container,
+.top-row,
+.bottom-row {
+    width: 100%;
+    text-align: center;
+}
+
+
+
+
+header{
+    margin-bottom: 20px;
+}
+form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+.timer-input{
+    max-width: 60%;
+    width: 100%;
+    padding: 5px;
+    margin-right: auto;
+}
+.timer-time{
+    margin-right: 10px;
+}
+.timer-button{
+    padding:5px;
+    border-radius: 4px;
+}
+
+.activity-container{
+    height: 80%;
+    overflow-y: scroll;
+}
+
+ul {
+    padding-left: 0;
+}
+
+li {
+    list-style: none;
+    margin-bottom: 10px;
+    padding: 15px;
+    background: rgb(255, 255, 255);
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+}
+
+.top-row,
+.bottom-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.top-row > div,
+.bottom-row > div{
+    max-width: 50%;
+}
+
+.top-row{
+    color: black;
+    font-weight: 500;
+}
+.bottom-row{
+    color:grey;
+}
+
+.activity-title{
+    overflow: hidden;
+}
