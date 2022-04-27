@@ -8,9 +8,10 @@ function App() {
   const [activity, setActivity] = useState([]);
   return (
     <div className="App">
+      
       <header><h1>Activity Tracker</h1></header>
-      <Timer activity={activity} setActivity={setActivity} inputText={inputText} setInputText={setInputText}/>
-      <ActivityList/>
+      <Timer className="timer" activity={activity} setActivity={setActivity} inputText={inputText} setInputText={setInputText}/>
+      <ActivityList className="activityList"/>
     </div>
   );
 }
