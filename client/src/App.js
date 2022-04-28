@@ -5,13 +5,13 @@ import ActivityList from './components/ActivityList';
 
 function App() {
   const [inputText, setInputText] = useState("");
-  const [activity, setActivity] = useState([]);
+  const [activities, setActivities] = useState([]);
   return (
     <div className="App">
       
       <header><h1>Activity Tracker</h1></header>
-      <Timer className="timer" activity={activity} setActivity={setActivity} inputText={inputText} setInputText={setInputText}/>
-      <ActivityList className="activityList"/>
+      <Timer  activities={activities} setActivities={setActivities} inputText={inputText} setInputText={setInputText}/>
+      <ActivityList className="activityList" activities={activities} setActivities={setActivities}/>
     </div>
   );
 }
