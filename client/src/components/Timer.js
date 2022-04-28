@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { pad, timeDifference } from "../utils"
-import Axios from 'axios';
+import { pad, calculateTimeDifference } from "../utils"
+import axios from 'axios';
 
 
-const Timer = ({ inputText, setInputText, activity, setActivity }) => {
+const Timer = ({ inputText, setInputText, activities, setActivities }) => {
 
-    const [startTime, setStartTime] = useState("");
-    const [endTime, setEndTime] = useState("");
-    const [time, setTime] = useState("00:00:00");
-    const [isTracking, setTracking] = useState(false);
-    const [intervalId, setIntervalId] = useState(0);
+    const [startTime, setStartTime] = useState("");    // Keeps the start time. 
+    const [time, setTime] = useState("00:00:00");      // Used for timer. Not saved to the db, as it is not reliable enough. 
+    const [isTracking, setTracking] = useState(false); // Used for determining what button to show. 
+    const [intervalId, setIntervalId] = useState(0);   // Interval id, used to stop the interval function 
 
     const inputTextHandler = (e) => {
         setInputText(e.target.value);
@@ -18,31 +17,43 @@ const Timer = ({ inputText, setInputText, activity, setActivity }) => {
     const startTimeHandler = (e) => {
         e.preventDefault();
         const start = new Date();
-        setStartTime(start);
-        setTracking(!isTracking);
+        setStartTime(start);        
+        setTracking(!isTracking);   // Flips the tracking boolean, in order to show stop button. 
         const newIntervalId = setInterval(() => {
-            setTime(timeDifference(Date.now(),start.getTime())) // merely serves as a display time on timer. 
+            setTime(calculateTimeDifference(Date.now(), start.getTime())) 
         }, 1000);
         setIntervalId(newIntervalId);
     }
+
     const submitActivityHandler = (e) => {
         e.preventDefault();
         if (intervalId) {
             clearInterval(intervalId);
             setIntervalId(0);
         }
-
         setInputText("");
         setTracking(!isTracking);
 
         var end = new Date();
-        Axios.post('/activities', {
+
+        const activityObject = {
             title: inputText,
-            start: startTime.toLocaleTimeString('en-GB'),
+            start: startTime.toLocaleTimeString('en-GB'), // en-GB to get colons between hours minutes and seconds
             end: end.toLocaleTimeString('en-GB'),
-            
-            time: timeDifference(end.getTime(),startTime.getTime()) //Ensures correct second on end time.
-        }).then((res) => console.log(res));
+            time: calculateTimeDifference(end.getTime(), startTime.getTime()) //Ensures correct second on end time.
+        }
+        axios.post('/activities', activityObject)
+            .then((res) => {
+                console.log(res);
+
+                activityObject.id = res.data.id;
+                setActivities([
+                   activityObject, ...activities]
+                );
+            }).catch((err) => {
+                console.log(err.message)
+            });
+
         setStartTime("");
         setTime("00:00:00")
     }
@@ -54,7 +65,7 @@ const Timer = ({ inputText, setInputText, activity, setActivity }) => {
             {isTracking ?
                 <button className="timer-button" onClick={submitActivityHandler} type="submit">Stop</button>
                 :
-                <button className="timer-button" onClick={startTimeHandler}  type="submit">Start</button>
+                <button className="timer-button" onClick={startTimeHandler} type="submit">Start</button>
             }
         </form>
     );
