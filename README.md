@@ -1,6 +1,15 @@
 # activity_tracking
  React express app
 
+# Prerequisites 
+Sqlite is needed for this project : https://www.sqlite.org/download.html
+
+# How to run 
+Install node modules in server and client folders. 
+
+Run server by running command: npm run dev
+Run client by running command: npm start
+
 # Stack
 The tech stack is the following: 
 - React frontend 
