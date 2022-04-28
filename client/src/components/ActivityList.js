@@ -3,9 +3,7 @@ import axios from 'axios';
 import Activity from "./Activity";
 
 
-const ActivityList = () => {
-
-    const [activities, setActivities] = useState([]);
+const ActivityList = ({ activities, setActivities}) => {
 
     useEffect(() => {
         axios.get('/activities')
@@ -13,16 +11,16 @@ const ActivityList = () => {
                 setActivities(res.data.activities);
             })
             .catch(err => {
-                console.log(err);
+                console.log(err.message);
             })
     }, [])
-    console.log(activities)
+    
     return (
         <div className="activity-container">
             <ul className="activity-list">
                 {
                     activities.map((activity) =>
-                        <Activity key={activity.id} title={activity.title} start={activity.start} end={activity.end} time={activity.time} />
+                        <Activity key={activity.id} id={activity.id} title={activity.title} start={activity.start} end={activity.end} time={activity.time} />
                     )
                 }
             </ul>
