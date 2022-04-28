@@ -2,8 +2,7 @@ import React from "react";
 
 const Activity = ({ title, start, end, time }) => {
     return (
-        <li>
-           
+        <li >
                 <div className="top-row">
                     <div className="activity-title">
                         {title}
@@ -20,7 +19,6 @@ const Activity = ({ title, start, end, time }) => {
                         End: {end}
                     </div>
                 </div>
-
         </li>
     );
 };
